@@ -14,10 +14,10 @@ def create_note(db: Session, note: schemas.NoteCreate):
     db_note = models.Note(title=note.title, content=note.content)
     db.add(db_note)
 
-    for tag_name in note.tags:
-        db_tag = db.query(models.Tag).filter(models.Tag.name == tag_name).first()
+    for tag in note.tags:
+        db_tag = db.query(models.Tag).filter(models.Tag.name == tag.name).first()
         if not db_tag:
-            db_tag = models.Tag(name=tag_name)
+            db_tag = models.Tag(name=tag.name)
         db_note.tags.append(db_tag)
 
     db.commit()
@@ -30,6 +30,14 @@ def update_note(db: Session, note_id: int, note: schemas.NoteUpdate):
     if db_note:
         db_note.title = note.title
         db_note.content = note.content
+
+        db_note.tags = []
+        for tag in note.tags:
+            db_tag = db.query(models.Tag).filter(models.Tag.name == tag.name).first()
+            if not db_tag:
+                db_tag = models.Tag(name=tag.name)
+            db_note.tags.append(db_tag)
+
         db.commit()
         db.refresh(db_note)
     return db_note

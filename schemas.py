@@ -25,7 +25,7 @@ class Tag(TagBase):
 class NoteBase(BaseModel):
     title: str
     content: str
-    tags: List[str] = []
+    tags: List[TagBase] = []
 
 
 class NoteCreate(NoteBase):
