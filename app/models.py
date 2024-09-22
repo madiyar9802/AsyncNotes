@@ -10,6 +10,17 @@ note_tag_table = Table('note_tag', Base.metadata,
                        )
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+
+    notes = relationship("Note", back_populates="owner")
+
+
 class Note(Base):
     __tablename__ = "notes"
 
@@ -18,7 +29,9 @@ class Note(Base):
     content = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    owner_id = Column(Integer, ForeignKey('users.id'))
 
+    owner = relationship("User", back_populates="notes")
     tags = relationship("Tag", secondary=note_tag_table, back_populates="notes")
 
 
