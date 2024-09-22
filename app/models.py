@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base
+from app.database import Base
 
 # Таблица для связи многие ко многим (заметка - тег)
 note_tag_table = Table('note_tag', Base.metadata,
